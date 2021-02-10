@@ -1,0 +1,9 @@
+root_db_password: Xxhbyd5z
+dbname: zabbix
+dbpass: zabbix
+srvs:
+  - 22/tcp
+  - 80/tcp
+  - 443/tcp
+  - 10051/tcp
+  - 10050/tcp
