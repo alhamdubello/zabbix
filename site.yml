@@ -33,6 +33,16 @@
         - zabbix-apache-conf 
         - zabbix-agent
 
+    - name: Setup Zabbix Php config
+      template:
+        src: templates/zabbix.conf.j2
+        dest: /var/www/html/zabbix.conf.php
+        mode: '0644'
+      notify: restart apache
+    
+    - name: Restarting httpd after Zabbix Php configs
+      meta: flush_handlers
+
     - name: Ensure Mariadb is installed
       include: mariadb.yml
     
@@ -71,11 +81,22 @@
 
 
   handlers:
+    - name: restart apache
+      systemd:
+        name: httpd
+        state: restarted
+
     - name: reboot selinux
       command: systemctl reboot
 
     - name: import zabbix schema
-      command: zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
+      mysql_db:
+        name: zabbix
+        state: import
+        target: /usr/share/doc/zabbix-server-mysql/create.sql.gz
+        login_user: zabbix
+        login_password: zabbix
+
   
     - name: reload firewalld
       command: firewall-cmd --reload

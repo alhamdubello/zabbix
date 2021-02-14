@@ -1,5 +1,6 @@
 root_db_password: Xxhbyd5z
 dbname: zabbix
+dbuser: zabbix
 dbpass: zabbix
 srvs:
   - 22/tcp

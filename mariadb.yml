@@ -52,12 +52,19 @@
 - name: add zabbix
   mysql_db:
     name: zabbix
+    collation: utf8_bin
+    encoding: utf8
     state: present
   notify: import zabbix schema
+
+- name: Meta Zabbix db
+  meta: flush_handlers
+ 
 
 - name: add zabbix db user
   mysql_user:
     name: zabbix
     password: "{{ dbpass }}"
     priv: 'zabbix.*:ALL'
+    host: localhost
     state: present
